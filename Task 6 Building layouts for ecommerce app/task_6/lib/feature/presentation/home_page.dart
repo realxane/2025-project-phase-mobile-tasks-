@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_6/feature/domain/product.dart';
+import 'package:task_6/feature/presentation/add_update_page.dart';
 import 'details_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -25,7 +26,11 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const AddUpdatePage()),
+          );
+        },
         backgroundColor: cs.primary,
         shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.white),
