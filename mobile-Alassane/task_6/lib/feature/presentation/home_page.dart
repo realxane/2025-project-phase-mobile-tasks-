@@ -1,24 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:task_6/core/routes/app_routes.dart';
 import 'package:task_6/feature/domain/product.dart';
-import 'package:task_6/feature/presentation/add_update_page.dart';
-import 'details_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   static const _img =
       'https://www.oliversweeney.com/cdn/shop/files/Eastington_Cognac_1_sq1_9b3a983e-f624-47a1-ab17-bb58e32ebd40_630x806.progressive.jpg?v=1691063210';
 
-  List<Product> get products => List.generate(
-        6,
-        (i) => const Product(
-          title: 'Derby Leather Shoes',
-          category: "Men's shoe",
-          price: 120,
-          rating: 4.0,
-          imageUrl: _img,
-        ),
-      );
+  late List<Product> _products;
+
+  @override
+  void initState() {
+    super.initState();
+    _products = List.generate(
+      6,
+      (i) => Product(
+        title: 'Derby Leather Shoes',
+        category: "Men's shoe",
+        price: 120,
+        rating: 4.0,
+        imageUrl: _img,
+        description: 'Classic derby leather shoes, item #$i',
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +38,18 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const AddUpdatePage()),
+        onPressed: () async {
+          final result = await Navigator.pushNamed(
+            context,
+            AppRoutes.addUpdate,
+            arguments: null, // mode "ajout"
           );
+
+          if (result is Product) {
+            setState(() {
+              _products.add(result);
+            });
+          }
         },
         backgroundColor: cs.primary,
         shape: const CircleBorder(),
@@ -68,20 +88,26 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 12),
 
               ListView.separated(
-                itemCount: products.length,
+                itemCount: _products.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
-                  final p = products[index];
+                  final p = _products[index];
                   return _ProductCard(
                     product: p,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => DetailsPage(product: p),
-                        ),
+                    onTap: () async {
+                      final result = await Navigator.pushNamed(
+                        context,
+                        AppRoutes.details,
+                        arguments: p,
                       );
+
+                      if (result is Product) {
+                        setState(() {
+                          _products[index] = result;
+                        });
+                      }
                     },
                   );
                 },
@@ -185,7 +211,7 @@ class _NotifSquare extends StatelessWidget {
             clipBehavior: Clip.none,
             children: [
               const Center(
-                child: Icon(Icons.notifications_none_rounded,
+                child: Icon(Iconsax.notification,
                     color: Colors.black87, size: 22),
               ),
               if (hasUnread)

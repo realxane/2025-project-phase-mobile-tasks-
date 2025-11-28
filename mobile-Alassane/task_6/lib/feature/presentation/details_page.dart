@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_6/core/routes/app_routes.dart';
 import 'package:task_6/feature/domain/product.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -172,8 +173,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                       const SizedBox(height: 18),
                       Text(
-                        'A derby leather shoe is a classic and versatile footwear option characterized by its open lacing system... '
-                        'With their timeless style and comfortable fit, derby leather shoes are a staple in any well‑rounded wardrobe.',
+                        p.description,
                         style: TextStyle(
                           color: Colors.black.withOpacity(0.7),
                           height: 1.35,
@@ -223,10 +223,18 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                         elevation: 0,
                       ),
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Size $selectedSize updated')),
+                      onPressed: () async {
+                        final updated = await Navigator.pushNamed(
+                          context,
+                          AppRoutes.addUpdate,
+                          arguments: widget.product, 
                         );
+
+                        if (!mounted) return;
+
+                        if (updated is Product) {
+                          Navigator.of(context).pop(updated);
+                        }
                       },
                       child: const Text(
                         'UPDATE',

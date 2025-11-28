@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:task_6/feature/domain/product.dart';
 
 class AddUpdatePage extends StatefulWidget {
-  const AddUpdatePage({super.key});
+  final Product? product; 
+
+  const AddUpdatePage({super.key, this.product});
 
   @override
   State<AddUpdatePage> createState() => _AddUpdatePageState();
@@ -14,6 +17,18 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
   final _category = TextEditingController();
   final _price = TextEditingController();
   final _description = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final p = widget.product;
+    if (p != null) {
+      _name.text = p.title;
+      _category.text = p.category;
+      _price.text = p.price.toStringAsFixed(0);
+      _description.text = p.description;
+    }
+  }
 
   final _picker = ImagePicker();
   XFile? _picked;
@@ -72,9 +87,9 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                     ),
                   ),
                   const Spacer(),
-                  const Text(
-                    'Add  Product',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  Text(
+                    widget.product == null ? 'Add Product' : 'Edit Product',
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   const Spacer(),
                   const SizedBox(width: 26),
@@ -234,9 +249,33 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                               fontWeight: FontWeight.w600, letterSpacing: 0.5),
                         ),
                         onPressed: () {
-                          // TODO: action d’ajout
+                          final title = _name.text.trim();
+                          final category = _category.text.trim();
+                          final description = _description.text.trim();
+                          final price = double.tryParse(_price.text.trim()) ?? 0;
+
+                          if (title.isEmpty || description.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Title and description are required')),
+                            );
+                            return;
+                          }
+
+                          final old = widget.product;
+
+                          final product = Product(
+                            title: title,
+                            category: category.isEmpty ? (old?.category ?? 'Uncategorized') : category,
+                            price: price,
+                            rating: old?.rating ?? 0,
+                            imageUrl: old?.imageUrl ??
+                                'https://www.oliversweeney.com/cdn/shop/files/Eastington_Cognac_1_sq1_9b3a983e-f624-47a1-ab17-bb58e32ebd40_630x806.progressive.jpg?v=1691063210',
+                            description: description,
+                          );
+
+                          Navigator.of(context).pop(product); // ⬅️ renvoie le product
                         },
-                        child: const Text('ADD'),
+                        child: Text(widget.product == null ? 'ADD' : 'SAVE'),
                       ),
                     ),
                     const SizedBox(height: 12),
