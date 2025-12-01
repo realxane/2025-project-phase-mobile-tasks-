@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   image_picker: ^1.2.0
   iconsax: ^0.0.8
+  network_image_mock: ^2.1.1
 
 dev_dependencies:
   flutter_test:
