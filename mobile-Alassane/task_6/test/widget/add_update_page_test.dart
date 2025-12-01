@@ -13,7 +13,7 @@ void main() {
           ),
         );
 
-        // The button is called "ADD" when product == null
+        // The button is called "ADD" when product == null 
         final addButton = find.text('ADD');
 
         await tester.ensureVisible(addButton);
