@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:task_6/core/routes/app_routes.dart';
 import 'package:task_6/feature/domain/product.dart';
+import 'package:task_6/feature/data/repositories/in_memory_product_repository.dart';
+import 'package:task_6/feature/domain/usecases/delete_product_usecase.dart';
 
 class DetailsPage extends StatefulWidget {
   final Product product;
@@ -13,6 +15,29 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   final List<int> sizes = [39, 40, 41, 42, 43, 44, 45, 46];
   int selectedSize = 41;
+
+  late final InMemoryProductRepository _repository;
+  late final DeleteProductUseCase _deleteProductUseCase;
+
+  @override
+  void initState() {
+    super.initState();
+    _repository = InMemoryProductRepository();
+    _deleteProductUseCase = DeleteProductUseCase(_repository);
+  }
+
+  void _onDelete() {
+    try {
+      _deleteProductUseCase(DeleteProductParams(widget.product.id));
+      if (!mounted) return;
+      Navigator.of(context).pop(true);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error while deleting item')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +76,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       elevation: 2,
                       child: IconButton(
                         icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                        onPressed: () => Navigator.of(context).maybePop(),
+                        onPressed: () => Navigator.of(context).maybePop(false),
                       ),
                     ),
                   ),
@@ -174,7 +199,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               ),
                               alignment: Alignment.center,
                               child: Text(
-                                '$size',
+                                '\$size',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -213,11 +238,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                 borderRadius: BorderRadius.circular(14),
                               ),
                             ),
-                            onPressed: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Item deleted')),
-                              );
-                            },
+                            onPressed: _onDelete,
                             child: const Text(
                               'DELETE',
                               style: TextStyle(
@@ -249,8 +270,9 @@ class _DetailsPageState extends State<DetailsPage> {
 
                               if (!mounted) return;
 
-                              if (updated is Product) {
-                                Navigator.of(context).pop(updated);
+                              // Si AddUpdatePage renvoie true, on remonte l’info
+                              if (updated == true) {
+                                Navigator.of(context).pop(true);
                               }
                             },
                             child: const Text(

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+
 import 'package:task_6/core/routes/app_routes.dart';
+import 'package:task_6/core/usecase/usecase.dart';
 import 'package:task_6/feature/domain/product.dart';
+import 'package:task_6/feature/domain/product_repository.dart';
+import 'package:task_6/feature/data/repositories/in_memory_product_repository.dart';
+import 'package:task_6/feature/domain/usecases/view_all_products_usecase.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,25 +16,47 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const _img =
-      'https://www.oliversweeney.com/cdn/shop/files/Eastington_Cognac_1_sq1_9b3a983e-f624-47a1-ab17-bb58e32ebd40_630x806.progressive.jpg?v=1691063210';
+  late final ProductRepository _repository;
+  late final ViewAllProductsUseCase _viewAllProductsUseCase;
 
-  late List<Product> _products;
+  List<Product> _products = [];
+  bool _isLoading = true;
+  String? _error;
 
   @override
   void initState() {
     super.initState();
-    _products = List.generate(
-      6,
-      (i) => Product(
-        title: 'Derby Leather Shoes',
-        category: "Men's shoe",
-        price: 120,
-        rating: 4.0,
-        imageUrl: _img,
-        description: 'Classic derby leather shoes, item #$i',
-      ),
-    );
+
+    _repository = InMemoryProductRepository(); // même singleton que partout
+    _viewAllProductsUseCase = ViewAllProductsUseCase(_repository);
+
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      final products = await _viewAllProductsUseCase(const NoParams());
+
+      if (!mounted) return;
+      setState(() {
+        _products = products;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = 'Erreur lors du chargement des produits';
+      });
+    } finally {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -42,13 +69,11 @@ class _HomePageState extends State<HomePage> {
           final result = await Navigator.pushNamed(
             context,
             AppRoutes.addUpdate,
-            arguments: null, // mode "ajout"
+            arguments: null,
           );
 
-          if (result is Product) {
-            setState(() {
-              _products.add(result);
-            });
+          if (result == true || result is Product) {
+            _loadProducts();
           }
         },
         backgroundColor: cs.primary,
@@ -87,31 +112,44 @@ class _HomePageState extends State<HomePage> {
 
               const SizedBox(height: 12),
 
-              ListView.separated(
-                itemCount: _products.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  final p = _products[index];
-                  return _ProductCard(
-                    product: p,
-                    onTap: () async {
-                      final result = await Navigator.pushNamed(
-                        context,
-                        AppRoutes.details,
-                        arguments: p,
-                      );
+              if (_isLoading) ...[
+                const Center(child: CircularProgressIndicator()),
+              ] else if (_error != null) ...[
+                Center(
+                  child: Text(
+                    _error!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
+              ] else if (_products.isEmpty) ...[
+                const Center(
+                  child: Text('Aucun produit disponible pour le moment.'),
+                ),
+              ] else ...[
+                ListView.separated(
+                  itemCount: _products.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final p = _products[index];
+                    return _ProductCard(
+                      product: p,
+                      onTap: () async {
+                        final result = await Navigator.pushNamed(
+                          context,
+                          AppRoutes.details,
+                          arguments: p,
+                        );
 
-                      if (result is Product) {
-                        setState(() {
-                          _products[index] = result;
-                        });
-                      }
-                    },
-                  );
-                },
-              ),
+                        if (result == true || result is Product) {
+                          _loadProducts();
+                        }
+                      },
+                    );
+                  },
+                ),
+              ],
             ],
           ),
         ),
@@ -122,8 +160,18 @@ class _HomePageState extends State<HomePage> {
   static String _formatToday() {
     final now = DateTime.now();
     const months = [
-      'January','February','March','April','May','June',
-      'July','August','September','October','November','December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
     ];
     return '${months[now.month - 1]} ${now.day}, ${now.year}';
   }
@@ -222,7 +270,7 @@ class _NotifSquare extends StatelessWidget {
                     width: 8,
                     height: 8,
                     decoration: BoxDecoration(
-                      color: cs.primary, 
+                      color: cs.primary,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -266,14 +314,12 @@ class _ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-
     return Material(
       color: Colors.white,
-      elevation: 1.5, 
+      elevation: 1.5,
       shadowColor: Colors.black12,
       borderRadius: BorderRadius.circular(18),
-      clipBehavior: Clip.antiAlias, 
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: Padding(
@@ -300,7 +346,7 @@ class _ProductCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      product.title,
+                      product.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(

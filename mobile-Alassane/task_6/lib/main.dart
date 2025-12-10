@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           return DetailsPage(product: product);
         },
         AppRoutes.addUpdate: (context) {
-          final product = ModalRoute.of(context)!.settings.arguments as Product;
+          final product = ModalRoute.of(context)!.settings.arguments as Product?;
           return AddUpdatePage(product: product);
         },
       },
