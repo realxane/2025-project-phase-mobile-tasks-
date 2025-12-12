@@ -11,6 +11,18 @@ class ProductModel extends Product {
     super.rating = 0.0,
   });
 
+  factory ProductModel.fromEntity(Product product) {
+    return ProductModel(
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      imageUrl: product.imageUrl,
+      price: product.price,
+      category: product.category,
+      rating: product.rating,
+    );
+  }
+
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
       id: json['id'] as String,
