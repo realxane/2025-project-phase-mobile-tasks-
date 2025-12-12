@@ -3,7 +3,7 @@ import 'package:iconsax/iconsax.dart';
 
 import 'package:task_6/core/routes/app_routes.dart';
 import 'package:task_6/core/usecase/usecase.dart';
-import 'package:task_6/feature/domain/product.dart';
+import 'package:task_6/feature/domain/entities/product.dart';
 import 'package:task_6/feature/domain/product_repository.dart';
 import 'package:task_6/feature/data/repositories/in_memory_product_repository.dart';
 import 'package:task_6/feature/domain/usecases/view_all_products_usecase.dart';

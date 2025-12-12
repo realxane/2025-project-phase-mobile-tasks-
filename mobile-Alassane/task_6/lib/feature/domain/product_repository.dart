@@ -1,4 +1,4 @@
-import 'product.dart';
+import 'package:task_6/feature/domain/entities/product.dart';
 
 abstract class ProductRepository {
   List<Product> viewAllProducts();

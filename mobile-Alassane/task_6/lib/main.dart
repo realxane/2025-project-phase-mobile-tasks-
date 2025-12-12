@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:task_6/core/routes/app_routes.dart';
-import 'package:task_6/feature/domain/product.dart';
+import 'package:task_6/feature/domain/entities/product.dart';
 import 'package:task_6/feature/presentation/add_update_page.dart';
 import 'package:task_6/feature/presentation/details_page.dart';
 import 'package:task_6/feature/presentation/home_page.dart';

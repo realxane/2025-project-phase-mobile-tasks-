@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:task_6/feature/domain/product.dart';
+import 'package:task_6/feature/domain/entities/product.dart';
 import 'package:task_6/feature/domain/product_repository.dart';
 import 'package:task_6/feature/data/repositories/in_memory_product_repository.dart';
 import 'package:task_6/feature/domain/usecases/create_product_usecase.dart';

@@ -1,4 +1,4 @@
-import 'package:task_6/feature/domain/product.dart';
+import 'package:task_6/feature/domain/entities/product.dart';
 import 'package:task_6/feature/domain/product_repository.dart';
 
 class InMemoryProductRepository implements ProductRepository {

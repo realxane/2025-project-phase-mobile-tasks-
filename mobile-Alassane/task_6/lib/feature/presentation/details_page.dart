@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_6/core/routes/app_routes.dart';
-import 'package:task_6/feature/domain/product.dart';
+import 'package:task_6/feature/domain/entities/product.dart';
 import 'package:task_6/feature/data/repositories/in_memory_product_repository.dart';
 import 'package:task_6/feature/domain/usecases/delete_product_usecase.dart';
 
