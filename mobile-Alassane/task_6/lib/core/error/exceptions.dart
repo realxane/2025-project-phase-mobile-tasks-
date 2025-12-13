@@ -19,3 +19,12 @@ class CacheException implements Exception {
   @override
   String toString() => 'CacheException: $message';
 }
+
+class ServerException implements Exception {
+  final int statusCode;
+  final String body;
+  const ServerException({required this.statusCode, required this.body});
+
+  @override
+  String toString() => 'ServerException($statusCode): $body';
+}
