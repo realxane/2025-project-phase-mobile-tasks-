@@ -105,7 +105,7 @@
     },
     {
       "name": "connectivity_plus",
-      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/connectivity_plus-7.0.0",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/connectivity_plus-6.1.5",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -342,6 +342,12 @@
       "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_windows-0.2.2",
       "packageUri": "lib/",
       "languageVersion": "3.6"
+    },
+    {
+      "name": "internet_connection_checker",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/internet_connection_checker-3.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
     },
     {
       "name": "io",

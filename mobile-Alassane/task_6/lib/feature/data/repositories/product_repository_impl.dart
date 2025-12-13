@@ -4,6 +4,7 @@ import '../../domain/product_repository.dart';
 import '../datasources/product_local_data_source.dart';
 import '../datasources/product_remote_data_source.dart';
 import '../models/product_model.dart';
+import '../../../core/error/exceptions.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
   final ProductRemoteDataSource remote;
@@ -37,7 +38,7 @@ class ProductRepositoryImpl implements ProductRepository {
     } else {
       final cached = await local.getCachedOne(id);     
       if (cached == null) {
-        throw Exception('No cached product for id=$id'); 
+        throw CacheMissException('No cached product for id=$id');
       }
       return cached;                                  
     }
@@ -50,7 +51,7 @@ class ProductRepositoryImpl implements ProductRepository {
       await remote.create(model);
       await local.cacheOne(model);
     } else {
-      throw Exception('No connection: cannot create product');
+      throw NoInternetConnectionException('cannot create product');
     }
   }
 
@@ -61,7 +62,7 @@ class ProductRepositoryImpl implements ProductRepository {
       await remote.update(model);
       await local.cacheOne(model);
     } else {
-      throw Exception('No connection: cannot update product');
+      throw NoInternetConnectionException('cannot update product');
     }
   }
 
@@ -71,7 +72,7 @@ class ProductRepositoryImpl implements ProductRepository {
       await remote.delete(id);
       await local.removeCached(id);
     } else {
-      throw Exception('No connection: cannot delete product');
+      throw NoInternetConnectionException('cannot delete product');
     }
   }
 }
