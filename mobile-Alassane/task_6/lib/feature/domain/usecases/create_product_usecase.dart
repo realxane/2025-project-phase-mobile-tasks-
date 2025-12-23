@@ -9,6 +9,6 @@ class CreateProductUseCase implements UseCase<void, Product> {
 
   @override
   Future<void> call(Product product) async {
-    repository.createProduct(product);
+    await repository.createProduct(product);
   }
 }

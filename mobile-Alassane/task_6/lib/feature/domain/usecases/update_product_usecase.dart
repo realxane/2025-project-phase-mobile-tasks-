@@ -9,6 +9,6 @@ class UpdateProductUseCase implements UseCase<void, Product> {
 
   @override
   Future<void> call(Product product) async {
-    repository.updateProduct(product);
+    await repository.updateProduct(product);
   }
 }

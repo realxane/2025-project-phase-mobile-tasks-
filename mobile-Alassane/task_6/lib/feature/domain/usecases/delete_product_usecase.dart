@@ -13,6 +13,6 @@ class DeleteProductUseCase implements UseCase<void, DeleteProductParams> {
 
   @override
   Future<void> call(DeleteProductParams params) async {
-    repository.deleteProduct(params.id);
+    await repository.deleteProduct(params.id);
   }
 }

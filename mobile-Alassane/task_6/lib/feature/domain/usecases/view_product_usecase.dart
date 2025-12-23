@@ -7,11 +7,11 @@ class ViewProductParams {
   const ViewProductParams(this.id);
 }
 
-class ViewProductUsecase
+class ViewProductUseCase
     implements UseCase<Product?, ViewProductParams> {
   final ProductRepository repository;
 
-  ViewProductUsecase(this.repository);
+  ViewProductUseCase(this.repository);
 
   @override
   Future<Product?> call(ViewProductParams params) async {

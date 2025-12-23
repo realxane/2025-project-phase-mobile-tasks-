@@ -3,13 +3,13 @@
   "packages": [
     {
       "name": "_fe_analyzer_shared",
-      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/_fe_analyzer_shared-92.0.0",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/_fe_analyzer_shared-91.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
     {
       "name": "analyzer",
-      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/analyzer-9.0.0",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/analyzer-8.4.1",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
@@ -28,6 +28,12 @@
     {
       "name": "bloc",
       "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/bloc-9.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "bloc_test",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/bloc_test-10.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -86,6 +92,12 @@
       "languageVersion": "3.8"
     },
     {
+      "name": "cli_config",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/cli_config-0.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "clock",
       "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/clock-1.1.2",
       "packageUri": "lib/",
@@ -118,6 +130,12 @@
     {
       "name": "convert",
       "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/convert-3.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "coverage",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/coverage-1.15.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -156,6 +174,12 @@
       "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/dbus-0.7.11",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "diff_match_patch",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/diff_match_patch-0.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "equatable",
@@ -246,6 +270,12 @@
       "rootUri": "file:///C:/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.8"
+    },
+    {
+      "name": "frontend_server_client",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/frontend_server_client-4.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "get_it",
@@ -356,6 +386,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "js",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.7.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
       "name": "json_annotation",
       "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/json_annotation-4.9.0",
       "packageUri": "lib/",
@@ -422,6 +458,12 @@
       "languageVersion": "3.7"
     },
     {
+      "name": "mocktail",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/mocktail-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "nested",
       "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/nested-1.0.0",
       "packageUri": "lib/",
@@ -436,6 +478,12 @@
     {
       "name": "nm",
       "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/nm-0.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "node_preamble",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/node_preamble-2.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -578,6 +626,18 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "shelf_packages_handler",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_packages_handler-3.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "shelf_static",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_static-1.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "shelf_web_socket",
       "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_web_socket-3.0.0",
       "packageUri": "lib/",
@@ -594,6 +654,18 @@
       "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/source_gen-4.1.1",
       "packageUri": "lib/",
       "languageVersion": "3.7"
+    },
+    {
+      "name": "source_map_stack_trace",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/source_map_stack_trace-2.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "source_maps",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/source_maps-0.10.13",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
     },
     {
       "name": "source_span",
@@ -632,8 +704,20 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "test",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/test-1.26.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
       "name": "test_api",
       "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.7.7",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "test_core",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/test_core-0.6.12",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -678,6 +762,12 @@
       "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/web_socket_channel-3.0.3",
       "packageUri": "lib/",
       "languageVersion": "3.3"
+    },
+    {
+      "name": "webkit_inspection_protocol",
+      "rootUri": "file:///C:/Users/PAPI/AppData/Local/Pub/Cache/hosted/pub.dev/webkit_inspection_protocol-1.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "xdg_directories",
