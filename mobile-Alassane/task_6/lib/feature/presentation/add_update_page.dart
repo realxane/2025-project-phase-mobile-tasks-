@@ -1,13 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:task_6/feature/domain/entities/product.dart';
-import 'package:task_6/feature/domain/product_repository.dart';
-import 'package:task_6/feature/data/repositories/in_memory_product_repository.dart';
-import 'package:task_6/feature/domain/usecases/create_product_usecase.dart';
-import 'package:task_6/feature/domain/usecases/update_product_usecase.dart';
-import 'package:task_6/feature/domain/usecases/delete_product_usecase.dart';
+import 'package:task_6/feature/presentation/bloc/product_bloc.dart';
+import 'package:task_6/feature/presentation/bloc/product_event.dart';
 
 class AddUpdatePage extends StatefulWidget {
   final Product? product;
@@ -27,11 +25,6 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
   final _picker = ImagePicker();
   XFile? _picked;
 
-  late final ProductRepository _repository;
-  late final CreateProductUseCase _createProductUseCase;
-  late final UpdateProductUseCase _updateProductUseCase;
-  late final DeleteProductUseCase _deleteProductUseCase;
-
   static const _defaultImageUrl =
       'https://www.oliversweeney.com/cdn/shop/files/Eastington_Cognac_1_sq1_9b3a983e-f624-47a1-ab17-bb58e32ebd40_630x806.progressive.jpg?v=1691063210';
 
@@ -41,12 +34,6 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
   @override
   void initState() {
     super.initState();
-
-    _repository = InMemoryProductRepository();
-    _createProductUseCase = CreateProductUseCase(_repository);
-    _updateProductUseCase = UpdateProductUseCase(_repository);
-    _deleteProductUseCase = DeleteProductUseCase(_repository);
-
     final p = widget.product;
     if (p != null) {
       _name.text = p.name;
@@ -107,19 +94,14 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
       description: description,
     );
 
-    try {
-      if (old == null) {
-        await _createProductUseCase(newProduct);
-      } else {
-        await _updateProductUseCase(newProduct);
-      }
-
-      Navigator.of(context).pop(true);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error while saving product')),
-      );
+    final bloc = context.read<ProductBloc>();
+    if (old == null) {
+      bloc.add(CreateProductEvent(newProduct));
+    } else {
+      bloc.add(UpdateProductEvent(newProduct));
     }
+
+    Navigator.of(context).pop(true);
   }
 
   Future<void> _onDelete() async {
@@ -128,15 +110,8 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
       Navigator.of(context).pop(false);
       return;
     }
-
-    try {
-      await _deleteProductUseCase(DeleteProductParams(old.id));
-      Navigator.of(context).pop(true);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error while deleting product')),
-      );
-    }
+    context.read<ProductBloc>().add(DeleteProductEvent(old.id));
+    Navigator.of(context).pop(true);
   }
 
   @override
@@ -182,7 +157,6 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                 ],
               ),
               const SizedBox(height: 12),
-
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -261,7 +235,6 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                       ),
                     ),
                     const SizedBox(height: 18),
-
                     const Text(
                       'name',
                       style:
@@ -273,7 +246,6 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                       decoration: _decoration(''),
                     ),
                     const SizedBox(height: 14),
-
                     const Text(
                       'category',
                       style:
@@ -285,7 +257,6 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                       decoration: _decoration(''),
                     ),
                     const SizedBox(height: 14),
-
                     const Text(
                       'price',
                       style:
@@ -317,7 +288,6 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                       ),
                     ),
                     const SizedBox(height: 14),
-
                     const Text(
                       'description',
                       style:
@@ -330,7 +300,6 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                       decoration: _decoration(''),
                     ),
                     const SizedBox(height: 18),
-
                     SizedBox(
                       width: double.infinity,
                       height: 48,
@@ -351,7 +320,6 @@ class _AddUpdatePageState extends State<AddUpdatePage> {
                       ),
                     ),
                     const SizedBox(height: 12),
-
                     SizedBox(
                       width: double.infinity,
                       height: 48,

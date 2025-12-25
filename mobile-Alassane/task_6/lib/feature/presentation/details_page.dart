@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_6/core/routes/app_routes.dart';
 import 'package:task_6/feature/domain/entities/product.dart';
-import 'package:task_6/feature/data/repositories/in_memory_product_repository.dart';
-import 'package:task_6/feature/domain/usecases/delete_product_usecase.dart';
+import 'package:task_6/feature/presentation/bloc/product_bloc.dart';
+import 'package:task_6/feature/presentation/bloc/product_event.dart';
 
 class DetailsPage extends StatefulWidget {
   final Product product;
@@ -16,27 +17,9 @@ class _DetailsPageState extends State<DetailsPage> {
   final List<int> sizes = [39, 40, 41, 42, 43, 44, 45, 46];
   int selectedSize = 41;
 
-  late final InMemoryProductRepository _repository;
-  late final DeleteProductUseCase _deleteProductUseCase;
-
-  @override
-  void initState() {
-    super.initState();
-    _repository = InMemoryProductRepository();
-    _deleteProductUseCase = DeleteProductUseCase(_repository);
-  }
-
   void _onDelete() {
-    try {
-      _deleteProductUseCase(DeleteProductParams(widget.product.id));
-      if (!mounted) return;
-      Navigator.of(context).pop(true);
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error while deleting item')),
-      );
-    }
+    context.read<ProductBloc>().add(DeleteProductEvent(widget.product.id));
+    Navigator.of(context).pop(true);
   }
 
   @override
@@ -50,7 +33,6 @@ class _DetailsPageState extends State<DetailsPage> {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              // Image part + back button
               Stack(
                 children: [
                   AspectRatio(
@@ -82,8 +64,6 @@ class _DetailsPageState extends State<DetailsPage> {
                   ),
                 ],
               ),
-
-              // Content part
               Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -94,7 +74,6 @@ class _DetailsPageState extends State<DetailsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title + price + rating
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -154,8 +133,6 @@ class _DetailsPageState extends State<DetailsPage> {
                       ],
                     ),
                     const SizedBox(height: 18),
-
-                    // Size
                     const Text(
                       'Size:',
                       style:
@@ -199,7 +176,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               ),
                               alignment: Alignment.center,
                               child: Text(
-                                '\$size',
+                                '$size',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -214,8 +191,6 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                     ),
                     const SizedBox(height: 18),
-
-                    // Description
                     Text(
                       p.description,
                       style: TextStyle(
@@ -224,7 +199,6 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-
                     Row(
                       children: [
                         Expanded(
@@ -267,10 +241,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                 AppRoutes.addUpdate,
                                 arguments: widget.product,
                               );
-
                               if (!mounted) return;
-
-                              // Si AddUpdatePage renvoie true, on remonte l’info
                               if (updated == true) {
                                 Navigator.of(context).pop(true);
                               }

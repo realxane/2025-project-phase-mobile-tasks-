@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'package:task_6/core/routes/app_routes.dart';
-import 'package:task_6/core/usecase/usecase.dart';
 import 'package:task_6/feature/domain/entities/product.dart';
-import 'package:task_6/feature/domain/product_repository.dart';
-import 'package:task_6/feature/data/repositories/in_memory_product_repository.dart';
-import 'package:task_6/feature/domain/usecases/view_all_products_usecase.dart';
+import 'package:task_6/feature/presentation/bloc/product_bloc.dart';
+import 'package:task_6/feature/presentation/bloc/product_event.dart';
+import 'package:task_6/feature/presentation/bloc/product_state.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,47 +16,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final ProductRepository _repository;
-  late final ViewAllProductsUseCase _viewAllProductsUseCase;
-
-  List<Product> _products = [];
-  bool _isLoading = true;
-  String? _error;
-
   @override
   void initState() {
     super.initState();
-
-    _repository = InMemoryProductRepository(); // même singleton que partout
-    _viewAllProductsUseCase = ViewAllProductsUseCase(_repository);
-
     _loadProducts();
   }
 
-  Future<void> _loadProducts() async {
-    setState(() {
-      _isLoading = true;
-      _error = null;
-    });
-
-    try {
-      final products = await _viewAllProductsUseCase(const NoParams());
-
-      if (!mounted) return;
-      setState(() {
-        _products = products;
-      });
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _error = 'Erreur lors du chargement des produits';
-      });
-    } finally {
-      if (!mounted) return;
-      setState(() {
-        _isLoading = false;
-      });
-    }
+  void _loadProducts() {
+    context.read<ProductBloc>().add(const LoadAllProductEvent());
   }
 
   @override
@@ -71,10 +38,7 @@ class _HomePageState extends State<HomePage> {
             AppRoutes.addUpdate,
             arguments: null,
           );
-
-          if (result == true || result is Product) {
-            _loadProducts();
-          }
+          if (result == true) _loadProducts();
         },
         backgroundColor: cs.primary,
         shape: const CircleBorder(),
@@ -93,7 +57,6 @@ class _HomePageState extends State<HomePage> {
                 date: _formatToday(),
               ),
               const SizedBox(height: 20),
-
               Row(
                 children: [
                   const Expanded(
@@ -109,47 +72,51 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 12),
-
-              if (_isLoading) ...[
-                const Center(child: CircularProgressIndicator()),
-              ] else if (_error != null) ...[
-                Center(
-                  child: Text(
-                    _error!,
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                ),
-              ] else if (_products.isEmpty) ...[
-                const Center(
-                  child: Text('Aucun produit disponible pour le moment.'),
-                ),
-              ] else ...[
-                ListView.separated(
-                  itemCount: _products.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
-                  itemBuilder: (context, index) {
-                    final p = _products[index];
-                    return _ProductCard(
-                      product: p,
-                      onTap: () async {
-                        final result = await Navigator.pushNamed(
-                          context,
-                          AppRoutes.details,
-                          arguments: p,
+              BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, state) {
+                  if (state is LoadingState || state is IntialState) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (state is ErrorState) {
+                    return Center(
+                      child: Text(
+                        state.message,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    );
+                  }
+                  if (state is LoadedAllProductState) {
+                    final products = state.products;
+                    if (products.isEmpty) {
+                      return const Center(
+                        child: Text('Aucun produit disponible pour le moment.'),
+                      );
+                    }
+                    return ListView.separated(
+                      itemCount: products.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        final p = products[index];
+                        return _ProductCard(
+                          product: p,
+                          onTap: () async {
+                            final result = await Navigator.pushNamed(
+                              context,
+                              AppRoutes.details,
+                              arguments: p,
+                            );
+                            if (result == true) _loadProducts();
+                          },
                         );
-
-                        if (result == true || result is Product) {
-                          _loadProducts();
-                        }
                       },
                     );
-                  },
-                ),
-              ],
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
             ],
           ),
         ),
@@ -176,6 +143,7 @@ class _HomePageState extends State<HomePage> {
     return '${months[now.month - 1]} ${now.day}, ${now.year}';
   }
 }
+
 
 class _HeaderBar extends StatelessWidget {
   final String name;
